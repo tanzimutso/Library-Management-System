@@ -1,16 +1,14 @@
 #include <windows.h>
 #include<stdio.h>
-#include<conio.h>                   //contains delay(),getch(),gotoxy(),etc.
+#include<conio.h>
 #include <stdlib.h>
-#include<string.h>                  //contains strcmp(),strcpy(),strlen(),etc
-#include<ctype.h>                   //contains toupper(), tolower(),etc
-#include<dos.h>                     //contains _dos_getdate
-#include<time.h>
-
-#define RETURNTIME 15
+#include<string.h>
+#include<ctype.h>
+#include<dos.h>
+#include<Time.h>
 
 //list of function prototype
-char catagories[][15]={"Computer","Electronics","Electrical","Civil","Mechnnical","Architecture"};
+char* catagories[15]={"Computer","Electronics","Electrical","Mathematics","Textile","Architecture"};
 void returnfunc(void);
 void mainmenu(void);
 void addbooks(void);
@@ -19,18 +17,12 @@ void editbooks(void);
 void searchbooks(void);
 void issuebooks(void);
 void viewbooks(void);
-void closeapplication(void);
-int getdata();
+int gettxta();
 int checkid(int);
-int t(void);
-//void show_mouse(void);
 void Password();
 void issuerecord();
-void loaderanim();
 
 COORD coord = {0, 0};
-// sets coordinates to 0,0
-//COORD max_buffer_size = GetLargestConsoleWindowSize(hOut);
 COORD max_res,cursor_size;
 void gotoxy (int x,int y)
 {
@@ -46,19 +38,12 @@ void delay(unsigned int mseconds)
     goal = mseconds +clock();
     while(goal >clock());
 }
-//list of global files that can be acceed form anywhere in program
-FILE
-*fp,*ft,*fs;
-
-//list of global variable
+//list of global files
+FILE *fp,*ft,*fs;
 int s;
 char findbook;
-char password[10]=
-{
-    "codechamp"
-};
-
-struct meroDate
+char password[10]={"mbstu"};
+struct date
 {
     int mm,dd,yy;
 };
@@ -73,8 +58,8 @@ struct books
     int count;
     int rackno;
     char *cat;
-    struct meroDate issued;
-    struct meroDate duedate;
+    struct date issued;
+    struct date duetxte;
 };
 struct books a;
 int main()
@@ -85,15 +70,11 @@ int main()
 }
 void mainmenu()
 {
-//loaderanim();
-
     system("cls");
-//   textbackground(13);
-
     int i;
     gotoxy(20,3);
-    printf("\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2 MAIN MENU");
-    printf("\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2");
+    printf("\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2 LIBRARY MANAGEMENT SYSTEM");
+    printf(" \xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2");
     gotoxy(20,5);
     printf("\xDB\xDB\xDB\xDB\xB2 1. Add Books   ");
     gotoxy(20,7);
@@ -111,7 +92,6 @@ void mainmenu()
     gotoxy(20,19);
     printf("------------------------------------------");
     gotoxy(20,20);
-    t();
     gotoxy(20,21);
     printf("Enter your choice:");
     switch(getch())
@@ -141,7 +121,6 @@ void mainmenu()
         printf("Thanks for using the Program..");
         gotoxy(10,7);
         printf("Exiting in 5 second...........>");
-
         delay(5000);
         exit(0);
     }
@@ -155,17 +134,14 @@ void mainmenu()
         }
     }
 }
-void
-addbooks(
-    void
-)
+void addbooks(void)
 //funtion that add books
 {
     system("cls");
     int i;
     gotoxy(20,5);
-    printf("\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2SELECT CATEGOIES");
-    printf("\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2");
+    printf("\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2 SELECT CATAGORIES");
+    printf(" \xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2");
     gotoxy(20,7);
     printf("\xDB\xDB\xDB\xDB\xB2 1. Computer");
     gotoxy(20,9);
@@ -173,9 +149,9 @@ addbooks(
     gotoxy(20,11);
     printf("\xDB\xDB\xDB\xDB\xB2 3. Electrical");
     gotoxy(20,13);
-    printf("\xDB\xDB\xDB\xDB\xB2 4. Civil");
+    printf("\xDB\xDB\xDB\xDB\xB2 4. Mathematics");
     gotoxy(20,15);
-    printf("\xDB\xDB\xDB\xDB\xB2 5. Mechanical");
+    printf("\xDB\xDB\xDB\xDB\xB2 5. Textile");
     gotoxy(20,17);
     printf("\xDB\xDB\xDB\xDB\xB2 6. Architecture");
     gotoxy(20,19);
@@ -189,8 +165,8 @@ addbooks(
     if(s==7)
     mainmenu() ;
     system("cls");
-    fp=fopen("Bibek.dat","ab+");
-    if(getdata()==1)
+    fp=fopen("main.txt","ab+");
+    if(gettxta()==1)
     {
         a.cat=catagories[s-1];
         fseek(fp,0,SEEK_END);
@@ -207,15 +183,13 @@ addbooks(
         addbooks();
     }
 }
-void
-deletebooks()
+void deletebooks()
 //function that delete items from file fp
 {
     system("cls");
     int d;
     char another='y';
     while(another=='y')
-//infinite loop
 
     {
 system("cls");
@@ -223,7 +197,7 @@ gotoxy(10,5);
 
         printf("Enter the Book ID to  delete:");
         scanf("%d",&d);
-        fp=fopen("Bibek.dat","rb+");
+        fp=fopen("main.txt","r+");
         rewind(fp);
         while(fread(&a,sizeof(a),1,fp)==1)
         {
@@ -252,7 +226,7 @@ gotoxy(10,5);
             printf("Do you want to delete it?(Y/N):");
             if(getch()=='y')
             {
-                ft=fopen("test.dat","wb+");
+                ft=fopen("test.txt","w+");
 //temporary file for delete
                 rewind(fp);
                 while(fread(&a,sizeof(a),1,fp)==1)
@@ -263,15 +237,13 @@ gotoxy(10,5);
                         fwrite(&a,sizeof(a),1,ft);
 //write all in tempory file except that
                     }
-//we want to delete
 
                 }
                 fclose(ft);
                 fclose(fp);
-                remove("Bibek.dat");
-                rename("test.dat","Bibek.dat");
-//copy all item from temporary file to fp except that
-                fp=fopen("Bibek.dat","rb+");
+                remove("main.txt");
+                rename("test.txt","main.txt");
+                fp=fopen("main.txt","r+");
 //we want to delete
                 if(findbook=='t')
                 {
@@ -291,8 +263,7 @@ gotoxy(10,5);
     gotoxy(10,15);
     mainmenu();
 }
-void
-searchbooks()
+void searchbooks()
 {
     system("cls");
     int d;
@@ -303,8 +274,8 @@ searchbooks()
     printf("\xDB\xDB\xDB\xB2 2. Search By Name");
     gotoxy( 15,20);
     printf("Enter Your Choice");
-    fp=fopen("Bibek.dat","rb+");
-//open file for reading propose
+    fp=fopen("main.txt","r+");
+
     rewind(fp);
 //move pointer at the begining of file
     switch(getch())
@@ -360,8 +331,7 @@ searchbooks()
                 printf("\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2\xB2");
                 findbook='t';
             }
-        }
-        if(findbook!='t')
+               if(findbook!='t')
 //checks whether conditiion enters inside loop or not
         {
             gotoxy(20,8);
@@ -375,6 +345,8 @@ searchbooks()
             gotoxy(22,9);
             printf("\aNo Record Found");
         }
+        }
+
         gotoxy(20,17);
         printf("Try another search?(Y/N)");
         if(getch()=='y')
@@ -391,7 +363,7 @@ searchbooks()
         printf("****Search Books By Name****");
         gotoxy(20,5);
         printf("Enter Book Name:");
-        scanf("%s",s);
+        gets(s);
         int d=0;
         while(fread(&a,sizeof(a),1,fp)==1)
         {
@@ -421,7 +393,7 @@ searchbooks()
                 gotoxy(47,12);
                 printf("\xB2");
                 gotoxy(20,13);
-                printf("\xB2 Price:Rs.%.2f",a.Price);
+                printf("\xB2 Price:Tk.%.2f",a.Price);
                 gotoxy(47,13);
                 printf("\xB2");
                 gotoxy(20,14);
@@ -493,8 +465,8 @@ void issuebooks(void)
             gotoxy(10,6);
             printf("Enter the Book Id:");
             scanf("%d",&t);
-            fp=fopen("Bibek.dat","rb");
-            fs=fopen("Issue.dat","ab+");
+            fp=fopen("main.txt","rb");
+            fs=fopen("Issue.txt","ab+");
             if(checkid(t)==0)
 //issues those which are present in library
             {
@@ -507,37 +479,25 @@ void issuebooks(void)
                 gotoxy(10,11);
                 printf("Enter student name:");
                 scanf("%s",a.stname);
-// struct dosdate_t d; //for current date
+// struct dostxte_t d; //for current txte
+//
+// _dos_gettxte(&d);
 
-// _dos_getdate(&d);
+              a.issued.dd=19;
 
-// a.issued.dd=d.day;
-
-// a.issued.mm=d.month;
-
-//a.issued.yy=d.year;
+             a.issued.mm=6;
+             a.issued.yy=2016;
 
                 gotoxy(10,12);
-                printf("Issued date=%d-%d-%d",a.issued.dd,a.issued.mm,a.issued.yy);
+                printf("Issued txte=%d-%d-%d",a.issued.dd,a.issued.mm,a.issued.yy);
                 gotoxy(10,13);
                 printf("The BOOK of ID %d is issued",a.id);
-                a.duedate.dd=a.issued.dd+RETURNTIME;
-//for return date
-                a.duedate.mm=a.issued.mm;
-                a.duedate.yy=a.issued.yy;
-                if(a.duedate.dd>30)
-                {
-                   a.duedate.mm+=a.duedate.dd/30;
-                    a.duedate.dd-=30;
-                }
-
-                if(a.duedate.mm>12)
-                {
-                    a.duedate.yy+=a.duedate.mm/12;
-                    a.duedate.mm-=12;
-                }
+                a.duetxte.dd=a.issued.dd+3;
+//for return txte
+                a.duetxte.mm=a.issued.mm;
+                a.duetxte.yy=a.issued.yy;
                 gotoxy(10,14);
-                printf("To be return:%d-%d-%d",a.duedate.dd,a.duedate.mm,a.duedate.yy);
+                printf("To be return:%d-%d-%d",a.duetxte.dd,a.duetxte.mm,a.duetxte.yy);
                 fseek(fs,sizeof(a),SEEK_END);
                 fwrite(&a,sizeof(a),1,fs);
                 fclose(fs);
@@ -563,8 +523,8 @@ void issuebooks(void)
         int j=4;
         printf("*******************************Issued book list*******************************\n");
         gotoxy(2,2);
-        printf("STUDENT NAME    CATEGORY    ID    BOOK NAME    ISSUED DATE    RETURN DATE");
-        fs=fopen("Issue.dat","rb");
+        printf("STUDENT NAME    CATEGORY    ID    BOOK NAME    ISSUED txtE    RETURN txtE");
+        fs=fopen("Issue.txt","rb");
         while(fread(&a,sizeof(a),1,fs)==1)
         {
             gotoxy(2,j);
@@ -578,14 +538,14 @@ void issuebooks(void)
             gotoxy(51,j);
             printf("%d-%d-%d",a.issued.dd,a.issued.mm,a.issued.yy );
             gotoxy(65,j);
-            printf("%d-%d-%d",a.duedate.dd,a.duedate.mm,a.duedate.yy);
+            printf("%d-%d-%d",a.duetxte.dd,a.duetxte.mm,a.duetxte.yy);
 
-//struct dosdate_t d;
+//struct dostxte_t d;
 
-//_dos_getdate(&d);
+//_dos_gettxte(&d);
 
             gotoxy(50,25);
-//          printf("Current date=%d-%d-%d",d.day,d.month,d.year);
+//          printf("Current txte=%d-%d-%d",d.day,d.month,d.year);
             j++;
         }
         fclose(fs);
@@ -604,7 +564,7 @@ void issuebooks(void)
         while(another=='y')
         {
             scanf("%d",&p);
-            fs=fopen("Issue.dat","rb");
+            fs=fopen("Issue.txt","rb");
             while(fread(&a,sizeof(a),1,fs)==1)
             {
                 if(a.id==p)
@@ -620,351 +580,127 @@ void issuebooks(void)
             fflush(stdin);
             fclose(fs);
 
-            if
-            (c==0)
-
+            if(c==0)
             {
-
                 gotoxy(10,8);
-
-                printf
-                (
-                    "No Record Found"
-                );
-
+                printf("No Record Found");
             }
-
             gotoxy(10,13);
-
-            printf
-            (
-                "Try Another Search?(Y/N)"
-            );
-
+            printf("Try Another Search?(Y/N)");
             another=getch();
-
         }
-
     }
-
-    break
-    ;
-
+    break;
     case '4':
 //remove issued books from list
-
     {
+        system("cls");
 
-        system
-        (
-            "cls"
-        );
+        int b;
 
-        int
-        b;
-
-        FILE
-        *fg;
+        FILE *fg;
 //declaration of temporary file for delete
 
-        char
-        another=
-            'y'
-            ;
-
-        while
-        (another==
-                'y'
-        )
-
+        char another='y';
+        while(another=='y')
         {
-
             gotoxy(10,5);
+            printf("Enter book id to remove:");
+            scanf("%d",&b);
 
-            printf
-            (
-                "Enter book id to remove:"
-            );
-
-            scanf
-            (
-                "%d"
-                ,&b);
-
-            fs=
-                fopen
-                (
-                    "Issue.dat"
-                    ,
-                    "rb+"
-                );
-
-            while
-            (
-                fread
-                (&a,
-                 sizeof
-                 (a),1,fs)==1)
-
+            fs=fopen("Issue.txt","rb+");
+            while(fread(&a,sizeof(a),1,fs)==1)
             {
-
-                if
-                (a.id==b)
-
+                if(a.id==b)
                 {
-
                     issuerecord();
-
-                    findbook=
-                        't'
-                        ;
-
+                    findbook='t';
                 }
 
-                if
-                (findbook==
-                        't'
-                )
-
+                if(findbook=='t')
                 {
-
                     gotoxy(10,12);
-
-                    printf
-                    (
-                        "Do You Want to Remove it?(Y/N)"
-                    );
-
-                    if
-                    (getch()==
-                            'y'
-                    )
-
+                    printf("Do You Want to Remove it?(Y/N)");
+                    if(getch()=='y')
                     {
-
-                        fg=
-                            fopen
-                            (
-                                "record.dat"
-                                ,
-                                "wb+"
-                            );
-
-                        rewind
-                        (fs);
-
-                        while
-                        (
-                            fread
-                            (&a,
-                             sizeof
-                             (a),1,fs)==1)
-
+                        fg=fopen("record.txt","wb+");
+                        rewind(fs);
+                        while(fread(&a,sizeof(a),1,fs)==1)
                         {
-
-                            if
-                            (a.id!=b)
-
+                            if(a.id!=b)
                             {
-
-                                fseek
-                                (fs,0,SEEK_CUR);
-
-                                fwrite
-                                (&a,
-                                 sizeof
-                                 (a),1,fg);
-
+                                fseek(fs,0,SEEK_CUR);
+                                fwrite(&a,sizeof(a),1,fg);
                             }
-
                         }
-
-                        fclose
-                        (fs);
-
-                        fclose
-                        (fg);
-
-                        remove
-                        (
-                            "Issue.dat"
-                        );
-
-                        rename
-                        (
-                            "record.dat"
-                            ,
-                            "Issue.dat"
-                        );
-
+                        fclose(fs);
+                        fclose(fg);
+                        remove("Issue.txt");
+                        rename("record.txt","Issue.txt");
                         gotoxy(10,14);
 
-                        printf
-                        (
-                            "The issued book is removed from list"
-                        );
-
-
+                        printf("The issued book is removed from list");
                     }
-
-
                 }
-
-                if
-                (findbook!=
-                        't'
-                )
-
+                if(findbook!='t')
                 {
-
                     gotoxy(10,15);
-
-                    printf
-                    (
-                        "No Record Found"
-                    );
-
+                printf("No Record Found");
                 }
-
             }
-
             gotoxy(10,16);
-
-            printf
-            (
-                "Delete any more?(Y/N)"
-            );
-
+            printf("Delete any more?(Y/N)");
             another=getch();
-
         }
-
     }
-
-    default
-            :
-
+    default:
         gotoxy(10,18);
-
-        printf
-        (
-            "\aWrong Entry!!"
-        );
-
+        printf("\aWrong Entry!!");
         getch();
-
         issuebooks();
-
-        break
-        ;
-
+        break;
     }
-
     gotoxy(1,30);
-
     returnfunc();
 }
-void
-viewbooks(
-    void
-)
+void viewbooks(void)
 //show the list of book persists in library
 {
-
     int
     i=0,j;
-
-    system
-    (
-        "cls"
-    );
-
+    system("cls");
     gotoxy(1,1);
-
-    printf
-    (
-        "*********************************Book List*****************************"
-    );
-
+    printf("*********************************Book List*****************************");
     gotoxy(2,2);
-
-    printf
-    (
-        " CATEGORY     ID    BOOK NAME     AUTHOR       QTY     PRICE     RackNo "
-    );
-
+    printf(" CATEGORY     ID    BOOK NAME     AUTHOR       QTY     PRICE     RackNo ");
     j=4;
-
-    fp=
-        fopen
-        (
-            "Bibek.dat"
-            ,
-            "rb"
-        );
-
-    while
-    (
-        fread
-        (&a,
-         sizeof
-         (a),1,fp)==1)
-
+    fp=fopen("main.txt","rb");
+    while(fread(&a,sizeof(a),1,fp)==1)
     {
-
         gotoxy(3,j);
-
-        printf
-        (
-            "%s"
-            ,a.cat);
-
+        printf("%s",a.cat);
         gotoxy(16,j);
-
-        printf
-        (
-            "%d"
-            ,a.id);
-
+        printf("%d",a.id);
         gotoxy(22,j);
-
-        printf
-        (
-            "%s"
-            ,a.name);
+        printf("%s",a.name);
 
         gotoxy(36,j);
 
-        printf
-        (
-            "%s"
-            ,a.Author);
+        printf("%s",a.Author);
 
         gotoxy(50,j);
 
-        printf
-        (
-            "%d"
-            ,a.quantity);
+        printf("%d",a.quantity);
 
         gotoxy(57,j);
 
-        printf
-        (
-            "%.2f"
-            ,a.Price);
+        printf("%.2f",a.Price);
 
         gotoxy(69,j);
 
-        printf
-        (
-            "%d"
-            ,a.rackno);
+        printf("%d",a.rackno);
 
-        printf
-        (
-            "\n\n"
-        );
+        printf("\n\n");
 
         j++;
 
@@ -974,42 +710,24 @@ viewbooks(
 
     gotoxy(3,25);
 
-    printf
-    (
-        "Total Books =%d"
-        ,i);
+    printf("Total Books =%d",i);
 
-    fclose
-    (fp);
-
+    fclose(fp);
     gotoxy(35,25);
-
     returnfunc();
 }
-void
-editbooks(
-    void
-)
+void editbooks(void)
 //edit information about book
 {
 
-    system
-    (
-        "cls"
-    );
+    system("cls");
+    int c=0;
 
-    int
-    c=0;
-
-    int
-    d,e;
+    int d,e;
 
     gotoxy(20,4);
 
-    printf
-    (
-        "****Edit Books Section****"
-    );
+    printf("****Edit Books Section****");
     char another='y';
     while(another=='y')
     {
@@ -1017,7 +735,7 @@ editbooks(
         gotoxy(15,6);
         printf("Enter Book Id to be edited:");
         scanf("%d",&d);
-        fp=fopen("Bibek.dat","rb+");
+        fp=fopen("main.txt","rb+");
         while(fread(&a,sizeof(a),1,fp)==1)
         {
             if(checkid(d)==0)
@@ -1073,7 +791,7 @@ a:
     else
         goto a;
 }
-int getdata()
+int gettxta()
 {
     int t;
     gotoxy(20,3);
@@ -1164,30 +882,21 @@ int checkid(int t)
     return 1;
 //return 1 if it not
 }
-int t(void)
-//for time
-{
-    time_t t;
-    time(&t);
-    printf("Date and time:%s\n",ctime(&t));
-    return 0 ;
-}
+
 void Password(void)
-//for password option
 {
     system("cls");
     char d[25]="Password Protected";
     char ch,pass[10];
     int i=0,j;
-//textbackground(WHITE);
 
-//textcolor(RED);
     gotoxy(10,4);
     for(j=0; j<20; j++)
     {
         delay(50);
         printf("*");
     }
+    printf("  ");
     for(j=0; j<20; j++)
     {
         delay(50);
@@ -1211,12 +920,10 @@ void Password(void)
             i++;
         }
     }
-    pass[i] ='\0'
-        ;
+    pass[i] ='\0';
     if(strcmp(pass,password)==0)
     {
         gotoxy(15,9);
-//textcolor(BLINK);
         printf("Password match");
         gotoxy(17,10);
         printf("Press any key to countinue.....");
@@ -1239,22 +946,8 @@ issuerecord()
     gotoxy(10,8);
     printf("The Book has taken by Mr. %s",a.stname);
     gotoxy(10,9);
-    printf("Issued Date:%d-%d-%d",a.issued.dd,a.issued.mm,a.issued.yy);
+    printf("Issued txte:%d-%d-%d",a.issued.dd,a.issued.mm,a.issued.yy);
     gotoxy(10,10);
-    printf("Returning Date:%d-%d-%d"        ,a.duedate.dd,a.duedate.mm,a.duedate.yy);
-}
-void loaderanim()
-{
-    int loader;
-    system("cls");
-    gotoxy(20,10);
-    printf("LOADING........");
-    printf("\n\n");
-    gotoxy(22,11);
-    for(loader=1; loader<20; loader++)
-    {
-        delay(100);
-        printf("%c",219);
-    }
+    printf("Returning txte:%d-%d-%d"        ,a.duetxte.dd,a.duetxte.mm,a.duetxte.yy);
 }
 
